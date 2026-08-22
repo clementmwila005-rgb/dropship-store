@@ -99,6 +99,7 @@ export async function POST(req: Request) {
       supplierUrl: body.supplierUrl ? String(body.supplierUrl).trim() : null,
       imageUrl: body.imageUrl ? String(body.imageUrl).trim() : null,
       videoUrl: body.videoUrl ? String(body.videoUrl).trim() : null,
+      moq: Math.max(1, Number(body.moq) || 1),
       stock: Math.max(0, Number(body.stock) || 0),
       isActive: body.isActive !== false,
       categoryId: body.categoryId ? String(body.categoryId) : null,

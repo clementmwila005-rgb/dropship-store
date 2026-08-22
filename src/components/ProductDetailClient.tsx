@@ -13,6 +13,7 @@ export default function ProductDetailClient({
   basePriceCents,
   baseCompareAtCents,
   baseStock,
+  moq,
   hasVariants,
   groups,
   images,
@@ -23,6 +24,7 @@ export default function ProductDetailClient({
   basePriceCents: number;
   baseCompareAtCents: number | null;
   baseStock: number;
+  moq: number;
   hasVariants: boolean;
   groups: VariantGroup[];
   images: { id: string; url: string; variantId: string | null }[];
@@ -101,6 +103,9 @@ export default function ProductDetailClient({
             <p className="mt-2 text-sm text-gray-500">
               {baseStock <= 0 ? "Sold out" : `In stock (${baseStock} available)`}
             </p>
+            {moq > 1 && (
+              <p className="mt-1 text-sm text-amber-600 font-medium">Minimum order: {moq} units</p>
+            )}
             <div className="mt-6">
               {baseStock <= 0 ? (
                 <div className="w-full max-w-xs rounded-lg bg-gray-100 px-6 py-3 text-center text-sm font-semibold text-gray-400">
@@ -108,10 +113,10 @@ export default function ProductDetailClient({
                 </div>
               ) : (
                 <div className="grid max-w-md grid-cols-2 gap-3">
-                  <AddToCartButton productId={productId} className="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:opacity-50">
+                  <AddToCartButton productId={productId} quantity={moq} className="w-full rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 disabled:opacity-50">
                     Add to cart
                   </AddToCartButton>
-                  <AddToCartButton productId={productId} buyNow className="w-full rounded-lg border border-gray-300 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 disabled:opacity-50">
+                  <AddToCartButton productId={productId} quantity={moq} buyNow className="w-full rounded-lg border border-gray-300 bg-white px-6 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50 disabled:opacity-50">
                     Buy now
                   </AddToCartButton>
                 </div>

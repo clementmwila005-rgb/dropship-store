@@ -65,6 +65,7 @@ export async function PUT(req: Request, ctx: { params: Promise<{ id: string }> }
     supplierUrl: body.supplierUrl !== undefined ? (String(body.supplierUrl).trim() || null) : existing.supplierUrl,
     imageUrl: body.imageUrl !== undefined ? (String(body.imageUrl).trim() || null) : existing.imageUrl,
     videoUrl: body.videoUrl !== undefined ? (String(body.videoUrl).trim() || null) : existing.videoUrl,
+    moq: body.moq !== undefined ? Math.max(1, Number(body.moq) || 1) : existing.moq,
     stock: body.stock !== undefined ? Math.max(0, Number(body.stock) || 0) : existing.stock,
     isActive: body.isActive !== undefined ? Boolean(body.isActive) : existing.isActive,
     categoryId: body.categoryId !== undefined ? (String(body.categoryId) || null) : existing.categoryId,

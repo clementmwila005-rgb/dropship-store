@@ -15,6 +15,7 @@ type ProductFormProps = {
     supplierUrl: string | null;
     imageUrl: string | null;
     videoUrl: string | null;
+    moq: number;
     stock: number;
     isActive: boolean;
     categoryId: string | null;
@@ -56,6 +57,7 @@ export default function ProductForm({ initial, categories }: ProductFormProps) {
     supplierUrl: initial?.supplierUrl ?? "",
     imageUrl: initial?.imageUrl ?? "",
     videoUrl: initial?.videoUrl ?? "",
+    moq: initial?.moq ?? 1,
     stock: initial?.stock ?? 0,
     isActive: initial?.isActive ?? true,
     categoryId: initial?.categoryId ?? "",
@@ -264,6 +266,10 @@ export default function ProductForm({ initial, categories }: ProductFormProps) {
           <div>
             <label htmlFor="stock" className={labelCls}>Stock quantity</label>
             <input id="stock" type="number" min="0" value={form.stock} onChange={(e) => set("stock", Number(e.target.value))} className={inputCls} />
+          </div>
+          <div>
+            <label htmlFor="moq" className={labelCls}>Minimum order qty</label>
+            <input id="moq" type="number" min="1" value={form.moq} onChange={(e) => set("moq", Number(e.target.value))} className={inputCls} />
           </div>
         </div>
 

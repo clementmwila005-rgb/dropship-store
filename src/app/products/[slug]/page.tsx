@@ -80,6 +80,7 @@ export default async function ProductPage({
         basePriceCents={product.priceCents}
         baseCompareAtCents={product.compareAtCents}
         baseStock={product.stock}
+        moq={product.moq ?? 1}
         hasVariants={hasVariants}
         groups={groups}
         images={images

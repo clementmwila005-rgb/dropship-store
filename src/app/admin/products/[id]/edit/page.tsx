@@ -43,6 +43,7 @@ export default async function EditProductPage({
             supplierUrl: product.supplierUrl,
             imageUrl: product.imageUrl,
             videoUrl: product.videoUrl,
+            moq: product.moq,
             stock: product.stock,
             isActive: product.isActive,
             categoryId: product.categoryId,
