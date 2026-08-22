@@ -64,6 +64,8 @@ export default function ProductForm({ initial, categories }: ProductFormProps) {
   const [busy, setBusy] = useState(false);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [videoUploading, setVideoUploading] = useState(false);
+  const videoFileInputRef = useRef<HTMLInputElement>(null);
   const [galleryUploading, setGalleryUploading] = useState(false);
   const galleryFileInputRef = useRef<HTMLInputElement>(null);
   const [images, setImages] = useState<ImageDraft[]>(initial?.images ?? []);
@@ -184,6 +186,30 @@ export default function ProductForm({ initial, categories }: ProductFormProps) {
     }
   }
 
+  async function uploadVideo(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setVideoUploading(true);
+    setError("");
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      fd.append("kind", "video");
+      const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data.error || "Upload failed");
+        return;
+      }
+      set("videoUrl", data.url);
+    } catch {
+      setError("Couldn't reach the server. Please try again.");
+    } finally {
+      setVideoUploading(false);
+      if (videoFileInputRef.current) videoFileInputRef.current.value = "";
+    }
+  }
+
   async function uploadGalleryImage(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -258,9 +284,19 @@ export default function ProductForm({ initial, categories }: ProductFormProps) {
         </div>
 
         <div>
-          <label htmlFor="videoUrl" className={labelCls}>Product video URL (optional)</label>
-          <input id="videoUrl" type="url" value={form.videoUrl} onChange={(e) => set("videoUrl", e.target.value)} placeholder="YouTube, Vimeo, or direct MP4 link" className={inputCls} />
-          <p className="mt-1 text-xs text-gray-500">Paste a YouTube, Vimeo, or direct video link. Shown on the product page.</p>
+          <label htmlFor="videoUrl" className={labelCls}>Product video</label>
+          <div className="mt-1 flex flex-wrap items-center gap-3">
+            <input
+              ref={videoFileInputRef}
+              type="file"
+              accept="video/mp4,video/webm,video/quicktime"
+              onChange={uploadVideo}
+              className="block w-full max-w-xs text-sm text-gray-600 file:mr-3 file:rounded-lg file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-blue-500"
+            />
+            {videoUploading && <span className="text-sm text-gray-500">Uploading…</span>}
+          </div>
+          <p className="mt-1 text-xs text-gray-500">Upload MP4, WebM, or paste a YouTube / Vimeo link below:</p>
+          <input id="videoUrl" type="url" value={form.videoUrl} onChange={(e) => set("videoUrl", e.target.value)} placeholder="https://youtube.com/watch?v=..." className={inputCls} />
           {form.videoUrl && (
             <div className="mt-2 aspect-video w-full max-w-md overflow-hidden rounded-lg border border-gray-200">
               {form.videoUrl.includes("youtube.com") || form.videoUrl.includes("youtu.be") ? (
@@ -268,7 +304,7 @@ export default function ProductForm({ initial, categories }: ProductFormProps) {
               ) : form.videoUrl.includes("vimeo.com") ? (
                 <iframe src={form.videoUrl.replace("vimeo.com/", "player.vimeo.com/video/")} className="h-full w-full" allowFullScreen title="Product video" />
               ) : (
-                <video src={form.videoUrl} controls className="h-full w-full object-cover" />
+                <video src={form.videoUrl} controls className="h-full w-full object-contain bg-black" />
               )}
             </div>
           )}
