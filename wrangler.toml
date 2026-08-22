@@ -1,0 +1,7 @@
+name = "dropship-store"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# Environment variables go here (or set via Cloudflare Dashboard)
+# Never commit secrets to this file

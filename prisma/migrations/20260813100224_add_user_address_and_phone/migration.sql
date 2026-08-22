@@ -1,0 +1,11 @@
+-- AlterTable
+ALTER TABLE "Order" ADD COLUMN "phone" TEXT;
+
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN "address1" TEXT;
+ALTER TABLE "User" ADD COLUMN "address2" TEXT;
+ALTER TABLE "User" ADD COLUMN "city" TEXT;
+ALTER TABLE "User" ADD COLUMN "country" TEXT;
+ALTER TABLE "User" ADD COLUMN "phone" TEXT;
+ALTER TABLE "User" ADD COLUMN "state" TEXT;
+ALTER TABLE "User" ADD COLUMN "zip" TEXT;

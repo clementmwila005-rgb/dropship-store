@@ -1,0 +1,161 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String     @id @default(cuid())
+  name         String
+  email        String     @unique
+  passwordHash String
+  role         String     @default("customer") // customer | admin
+  // Shipping address (captured at registration, kept up to date at checkout)
+  address1     String?
+  address2     String?
+  city         String?
+  state        String?
+  zip          String?
+  country      String?
+  phone        String?
+  // Shipping agent / freight forwarder in China (receives the order from the supplier)
+  agentName    String?
+  agentPhone   String?
+  agentAddress String?
+  agentCity    String?
+  agentProvince String?
+  agentZip     String?
+  createdAt    DateTime   @default(now())
+  orders       Order[]
+  cartItems    CartItem[]
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  slug     String    @unique
+  products Product[]
+}
+
+model Product {
+  id             String     @id @default(cuid())
+  name           String
+  slug           String     @unique
+  description    String
+  priceCents     Int
+  compareAtCents Int?
+  costCents      Int?
+  supplierUrl    String?
+  imageUrl       String?
+  stock          Int        @default(100)
+  isActive       Boolean    @default(true)
+  categoryId     String?
+  category       Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  orderItems     OrderItem[]
+  cartItems      CartItem[]
+  variants       ProductVariant[]
+  images         ProductImage[]
+}
+
+model ProductImage {
+  id        String           @id @default(cuid())
+  productId String
+  product   Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  position  Int              @default(0)
+  variantId String?
+  variant   ProductVariant?  @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  createdAt DateTime         @default(now())
+}
+
+model ProductVariant {
+  id             String   @id @default(cuid())
+  productId      String
+  product        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  group          String   @default("")
+  name           String
+  priceCents     Int?
+  compareAtCents Int?
+  stock          Int?
+  createdAt      DateTime @default(now())
+  cartItems      CartItem[]
+  images         ProductImage[]
+
+  @@unique([productId, group, name])
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  number          String      @unique
+  userId          String?
+  user            User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  email           String
+  name            String
+  address1        String
+  address2        String?
+  city            String
+  state           String?
+  zip             String
+  country         String
+  subtotalCents   Int
+  shippingCents   Int         @default(0)
+  totalCents      Int
+  currency        String      @default("ZMW")
+  paymentMethod   String      @default("card")
+  // PENDING -> PAID -> PROCESSING -> SHIPPED -> DELIVERED  (or CANCELLED)
+  status          String      @default("PENDING")
+  // True when the customer has no shipping agent: ships straight to their home address.
+  // The shipping fee is then communicated to them via WhatsApp / email.
+  shipToHome       Boolean     @default(false)
+  whatsappNumber   String?
+  trackingNumber  String?
+  trackingCarrier String?
+  phone           String?
+  // Shipping agent / freight forwarder in China (receives the order from the supplier)
+  agentName       String?
+  agentPhone      String?
+  agentAddress    String?
+  agentCity       String?
+  agentProvince   String?
+  agentZip        String?
+  lipilaReference     String?
+  lipilaIdentifier    String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   String?
+  product     Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  name        String
+  variantName String?
+  priceCents  Int
+  quantity    Int
+  imageUrl    String?
+}
+
+model CartItem {
+  id        String          @id @default(cuid())
+  userId    String
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  variantId String?
+  variant   ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  // Human-readable combination, e.g. "Green / S" ("" = no variant)
+  variantKey String         @default("")
+  quantity  Int             @default(1)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@unique([userId, productId, variantKey])
+}
