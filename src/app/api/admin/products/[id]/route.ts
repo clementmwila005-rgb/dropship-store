@@ -64,6 +64,7 @@ export async function PUT(req: Request, ctx: { params: Promise<{ id: string }> }
     costCents: body.cost !== undefined && body.cost !== "" ? toCents(body.cost) : existing.costCents,
     supplierUrl: body.supplierUrl !== undefined ? (String(body.supplierUrl).trim() || null) : existing.supplierUrl,
     imageUrl: body.imageUrl !== undefined ? (String(body.imageUrl).trim() || null) : existing.imageUrl,
+    videoUrl: body.videoUrl !== undefined ? (String(body.videoUrl).trim() || null) : existing.videoUrl,
     stock: body.stock !== undefined ? Math.max(0, Number(body.stock) || 0) : existing.stock,
     isActive: body.isActive !== undefined ? Boolean(body.isActive) : existing.isActive,
     categoryId: body.categoryId !== undefined ? (String(body.categoryId) || null) : existing.categoryId,

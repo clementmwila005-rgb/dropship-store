@@ -42,6 +42,7 @@ export default async function EditProductPage({
             costCents: product.costCents,
             supplierUrl: product.supplierUrl,
             imageUrl: product.imageUrl,
+            videoUrl: product.videoUrl,
             stock: product.stock,
             isActive: product.isActive,
             categoryId: product.categoryId,

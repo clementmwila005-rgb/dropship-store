@@ -92,6 +92,35 @@ export default async function ProductPage({
         <p className="mt-2 whitespace-pre-line text-gray-700">{product.description || "No description provided."}</p>
       </div>
 
+      {product.videoUrl && (
+        <div className="mt-8">
+          <h2 className="text-lg font-semibold text-gray-900">Product Video</h2>
+          <div className="mt-2 aspect-video w-full max-w-2xl overflow-hidden rounded-xl border border-gray-200">
+            {product.videoUrl.includes("youtube.com") || product.videoUrl.includes("youtu.be") ? (
+              <iframe
+                src={product.videoUrl.replace("watch?v=", "embed/")}
+                className="h-full w-full"
+                allowFullScreen
+                title="Product video"
+              />
+            ) : product.videoUrl.includes("vimeo.com") ? (
+              <iframe
+                src={product.videoUrl.replace("vimeo.com/", "player.vimeo.com/video/")}
+                className="h-full w-full"
+                allowFullScreen
+                title="Product video"
+              />
+            ) : (
+              <video
+                src={product.videoUrl}
+                controls
+                className="h-full w-full object-contain bg-black"
+              />
+            )}
+          </div>
+        </div>
+      )}
+
       {(related || []).length > 0 && (
         <section className="mt-16">
           <h2 className="mb-6 text-2xl font-bold">You might also like</h2>

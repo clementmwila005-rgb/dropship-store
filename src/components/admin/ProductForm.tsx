@@ -14,6 +14,7 @@ type ProductFormProps = {
     costCents: number | null;
     supplierUrl: string | null;
     imageUrl: string | null;
+    videoUrl: string | null;
     stock: number;
     isActive: boolean;
     categoryId: string | null;
@@ -54,6 +55,7 @@ export default function ProductForm({ initial, categories }: ProductFormProps) {
     cost: toDollars(initial?.costCents),
     supplierUrl: initial?.supplierUrl ?? "",
     imageUrl: initial?.imageUrl ?? "",
+    videoUrl: initial?.videoUrl ?? "",
     stock: initial?.stock ?? 0,
     isActive: initial?.isActive ?? true,
     categoryId: initial?.categoryId ?? "",
@@ -122,6 +124,7 @@ export default function ProductForm({ initial, categories }: ProductFormProps) {
 
     const payload = {
       ...form,
+      videoUrl: form.videoUrl || null,
       isActive: form.isActive,
       categoryId: form.categoryId || null,
       variants: variants
@@ -252,6 +255,23 @@ export default function ProductForm({ initial, categories }: ProductFormProps) {
         <div>
           <label htmlFor="supplierUrl" className={labelCls}>Supplier URL (AliExpress / 1688 etc.)</label>
           <input id="supplierUrl" type="url" value={form.supplierUrl} onChange={(e) => set("supplierUrl", e.target.value)} placeholder="https://www.aliexpress.com/item/..." className={inputCls} />
+        </div>
+
+        <div>
+          <label htmlFor="videoUrl" className={labelCls}>Product video URL (optional)</label>
+          <input id="videoUrl" type="url" value={form.videoUrl} onChange={(e) => set("videoUrl", e.target.value)} placeholder="YouTube, Vimeo, or direct MP4 link" className={inputCls} />
+          <p className="mt-1 text-xs text-gray-500">Paste a YouTube, Vimeo, or direct video link. Shown on the product page.</p>
+          {form.videoUrl && (
+            <div className="mt-2 aspect-video w-full max-w-md overflow-hidden rounded-lg border border-gray-200">
+              {form.videoUrl.includes("youtube.com") || form.videoUrl.includes("youtu.be") ? (
+                <iframe src={form.videoUrl.replace("watch?v=", "embed/")} className="h-full w-full" allowFullScreen title="Product video" />
+              ) : form.videoUrl.includes("vimeo.com") ? (
+                <iframe src={form.videoUrl.replace("vimeo.com/", "player.vimeo.com/video/")} className="h-full w-full" allowFullScreen title="Product video" />
+              ) : (
+                <video src={form.videoUrl} controls className="h-full w-full object-cover" />
+              )}
+            </div>
+          )}
         </div>
 
         <div>

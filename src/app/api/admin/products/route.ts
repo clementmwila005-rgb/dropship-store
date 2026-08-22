@@ -98,6 +98,7 @@ export async function POST(req: Request) {
       costCents: toCents(body.cost),
       supplierUrl: body.supplierUrl ? String(body.supplierUrl).trim() : null,
       imageUrl: body.imageUrl ? String(body.imageUrl).trim() : null,
+      videoUrl: body.videoUrl ? String(body.videoUrl).trim() : null,
       stock: Math.max(0, Number(body.stock) || 0),
       isActive: body.isActive !== false,
       categoryId: body.categoryId ? String(body.categoryId) : null,
