@@ -8,8 +8,13 @@ const config = {
       tagCache: "dummy",
       queue: "dummy",
     },
+    routePreloadingBehavior: "none",
   },
   edgeExternals: ["node:crypto"],
+  cloudflare: {
+    useWorkerdCondition: true,
+    dangerousDisableConfigValidation: true,
+  },
   middleware: {
     external: true,
     override: {
