@@ -9,6 +9,7 @@
     "lint": "eslint",
     "pages:build": "npx @cloudflare/next-on-pages",
     "pages:deploy": "npx wrangler pages deploy .vercel/output/static",
+    "deploy": "npx wrangler deploy",
     "db:seed": "node prisma/seed.mjs",
     "db:export": "node scripts/migrate-data.mjs export",
     "db:import": "node scripts/migrate-data.mjs import",
