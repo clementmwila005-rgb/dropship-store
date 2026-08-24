@@ -3,6 +3,8 @@ import { supabase } from "@/lib/supabase";
 import { requireAdmin } from "@/lib/auth";
 import { ORDER_STATUSES } from "@/lib/format";
 
+export const runtime = "nodejs";
+
 export async function PUT(req: Request, ctx: { params: Promise<{ id: string }> }) {
   const admin = await requireAdmin();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

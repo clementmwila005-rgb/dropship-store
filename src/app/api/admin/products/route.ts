@@ -3,6 +3,8 @@ import { supabase } from "@/lib/supabase";
 import { requireAdmin } from "@/lib/auth";
 import { slugify } from "@/lib/format";
 
+export const runtime = "nodejs";
+
 function toCents(value: unknown): number | null {
   const n = Number(value);
   if (!Number.isFinite(n) || n < 0) return null;

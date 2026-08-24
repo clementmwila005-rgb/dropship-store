@@ -3,6 +3,8 @@ import { supabase } from "@/lib/supabase";
 import { requireUser } from "@/lib/auth";
 import { ZAMBIAN_PROVINCES } from "@/lib/format";
 
+export const runtime = "nodejs";
+
 export async function PUT(req: Request) {
   const user = await requireUser();
   if (!user) return NextResponse.json({ error: "Not logged in" }, { status: 401 });

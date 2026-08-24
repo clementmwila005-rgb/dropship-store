@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import { supabase } from "@/lib/supabase";
 import { createSession } from "@/lib/auth";
 
+export const runtime = "nodejs";
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -23,8 +25,8 @@ export async function POST(req: Request) {
     await createSession({ id: user.id, name: user.name, email: user.email, role: user.role });
 
     return NextResponse.json({ ok: true, user: { id: user.id, name: user.name, role: user.role } });
-  } catch (e) {
-    console.error("login error", e);
-    return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
+  } catch (e: any) {
+    console.error("login error", e?.message || e);
+    return NextResponse.json({ error: "Something went wrong. Please try again." }, { status: 500 });
   }
 }

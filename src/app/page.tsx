@@ -67,7 +67,11 @@ export default async function Home() {
 
         {products.length === 0 ? (
           <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-12 text-center">
-            <p className="text-gray-600">No products yet. Add some from the admin dashboard.</p>
+            <p className="text-2xl font-bold text-gray-900">Coming soon</p>
+            <p className="mt-2 text-gray-600">We&apos;re stocking up with the latest products. Check back soon!</p>
+            <Link href="/products" className="mt-4 inline-block rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500">
+              Browse all products
+            </Link>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">

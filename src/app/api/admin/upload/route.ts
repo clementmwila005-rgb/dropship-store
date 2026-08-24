@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 
+export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const IMAGE_TYPES = new Set(["image/png", "image/jpeg", "image/webp", "image/gif"]);

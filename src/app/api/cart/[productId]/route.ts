@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { requireUser } from "@/lib/auth";
 
+export const runtime = "nodejs";
+
 export async function DELETE(req: Request, ctx: { params: Promise<{ productId: string }> }) {
   const user = await requireUser();
   if (!user) return NextResponse.json({ error: "Not logged in" }, { status: 401 });

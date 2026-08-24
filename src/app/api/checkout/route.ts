@@ -8,6 +8,8 @@ import {
 } from "@/lib/lipila";
 import { genOrderNumber, ZAMBIAN_PROVINCES } from "@/lib/format";
 
+export const runtime = "nodejs";
+
 export async function POST(req: Request) {
   const user = await requireUser();
   if (!user) return NextResponse.json({ error: "Please log in to check out" }, { status: 401 });

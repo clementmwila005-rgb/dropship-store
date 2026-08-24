@@ -4,6 +4,8 @@ import { supabase } from "@/lib/supabase";
 import { createSession } from "@/lib/auth";
 import { ZAMBIAN_PROVINCES } from "@/lib/format";
 
+export const runtime = "nodejs";
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
