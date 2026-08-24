@@ -3,21 +3,28 @@ import { supabase } from "@/lib/supabase";
 import ProductCard from "@/components/ProductCard";
 
 export default async function Home() {
-  const [productsRes, categoriesRes] = await Promise.all([
-    supabase
-      .from("Product")
-      .select("*, variants:ProductVariant(*)")
-      .eq("isActive", true)
-      .order("createdAt", { ascending: false })
-      .limit(12),
-    supabase
-      .from("Category")
-      .select("*")
-      .order("name", { ascending: true }),
-  ]);
+  let products: any[] = [];
+  let categories: { id: string; name: string; slug: string }[] = [];
 
-  const products = productsRes.data || [];
-  const categories = categoriesRes.data || [];
+  try {
+    const [productsRes, categoriesRes] = await Promise.all([
+      supabase
+        .from("Product")
+        .select("*, variants:ProductVariant(*)")
+        .eq("isActive", true)
+        .order("createdAt", { ascending: false })
+        .limit(12),
+      supabase
+        .from("Category")
+        .select("*")
+        .order("name", { ascending: true }),
+    ]);
+
+    products = productsRes.data || [];
+    categories = categoriesRes.data || [];
+  } catch (e) {
+    console.error("Homepage query error:", e);
+  }
 
   return (
     <div>

@@ -3,22 +3,38 @@ import { supabase } from "@/lib/supabase";
 import LogoutButton from "./LogoutButton";
 
 export default async function Header() {
-  const { getSession } = await import("@/lib/auth");
-  const session = await getSession();
-
+  let session = null;
   let cartCount: number | null = null;
-  if (session) {
-    const { data } = await supabase
-      .from("CartItem")
-      .select("quantity")
-      .eq("userId", session.id);
-    cartCount = (data || []).reduce((sum, item) => sum + item.quantity, 0);
+  let categories: { id: string; name: string; slug: string }[] = [];
+
+  try {
+    const { getSession } = await import("@/lib/auth");
+    session = await getSession();
+  } catch (e) {
+    console.error("Header auth error:", e);
   }
 
-  const { data: categories } = await supabase
-    .from("Category")
-    .select("*")
-    .order("name", { ascending: true });
+  try {
+    if (session) {
+      const { data } = await supabase
+        .from("CartItem")
+        .select("quantity")
+        .eq("userId", session.id);
+      cartCount = (data || []).reduce((sum, item) => sum + item.quantity, 0);
+    }
+  } catch (e) {
+    console.error("Header cart error:", e);
+  }
+
+  try {
+    const { data } = await supabase
+      .from("Category")
+      .select("*")
+      .order("name", { ascending: true });
+    categories = data || [];
+  } catch (e) {
+    console.error("Header categories error:", e);
+  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-gray-200 bg-white/95 backdrop-blur">
